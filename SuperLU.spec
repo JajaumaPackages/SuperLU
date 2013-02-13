@@ -1,6 +1,6 @@
 Name:           SuperLU
 Version:        4.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Subroutines to solve sparse linear systems
 
 License:        BSD
@@ -70,6 +70,9 @@ cp -Pp SRC/libsuperlu.so %{buildroot}%{_libdir}
 %{_libdir}/libsuperlu.so
 
 %changelog
+* Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.3-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
 * Sat Aug 25 2012 Shakthi Kannan <shakthimaan [AT] fedoraproject dot org> 4.3-3
 - Use README in main package and DOC in devel package
 - chmod a-x on SRC/qselect.c
