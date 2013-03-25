@@ -1,6 +1,6 @@
 Name:           SuperLU
 Version:        4.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Subroutines to solve sparse linear systems
 
 License:        BSD
@@ -48,11 +48,13 @@ make %{?_smp_mflags} superlulib
 %install
 rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_libdir}
+mkdir -p %{buildroot}%{_docdir}/%{name}-devel-%{version}/EXAMPLE
 mkdir -p %{buildroot}%{_includedir}/%{name}
 install -p SRC/libsuperlu.so.%{version} %{buildroot}%{_libdir}
 install -p SRC/*.h %{buildroot}%{_includedir}/%{name}
 chmod -x %{buildroot}%{_includedir}/%{name}/*.h
 cp -Pp SRC/libsuperlu.so %{buildroot}%{_libdir}
+cp -p EXAMPLE/*.c EXAMPLE/*.cua EXAMPLE/Makefile EXAMPLE/README %{buildroot}%{_docdir}/%{name}-devel-%{version}/EXAMPLE
 
 %post -p /sbin/ldconfig
 
@@ -65,11 +67,14 @@ cp -Pp SRC/libsuperlu.so %{buildroot}%{_libdir}
 
 %files devel
 %defattr(-,root,root,-)
-%doc DOC
+%doc DOC FORTRAN
 %{_includedir}/%{name}/
 %{_libdir}/libsuperlu.so
 
 %changelog
+* Mon Mar 25 2013 Shakthi Kannan <shakthimaan [AT] fedoraproject dot org> 4.3-5
+- Ship SuperLU examples
+
 * Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.3-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
