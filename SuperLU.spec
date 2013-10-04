@@ -1,6 +1,6 @@
 Name:           SuperLU
 Version:        4.3
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Subroutines to solve sparse linear systems
 
 License:        BSD
@@ -35,43 +35,51 @@ and libraries for use with CUnit package.
 %setup -q -n %{name}_%{version}
 %patch0 -p1
 %patch1 -p1
-chmod a-x SRC/qselect.c 
+chmod a-x SRC/qselect.c EXAMPLE/cg20.cua
+# Remove the shippped executables from EXAMPLE
+find EXAMPLE -type f | while read file
+do
+   [ "$(file $file | awk '{print $2}')" = ELF ] && rm $file || :
+done
 cp -p MAKE_INC/make.linux make.inc
 sed -i "s|-O3|$RPM_OPT_FLAGS|" make.inc
 sed -i "s|\$(SUPERLULIB) ||" make.inc
 sed -i "s|\$(HOME)/Codes/%{name}_%{version}|%{_builddir}/%{name}_%{version}|" make.inc
+%if 0%{?fedora} >= 21
+sed -i "s|-L/usr/lib -lblas|-L%{_libdir}/atlas -lsatlas|" make.inc
+%else
 sed -i "s|-L/usr/lib -lblas|-L%{_libdir}/atlas -lf77blas|" make.inc
+%endif
 
 %build
 make %{?_smp_mflags} superlulib
 
 %install
-rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_libdir}
-mkdir -p %{buildroot}%{_docdir}/%{name}-devel-%{version}/EXAMPLE
 mkdir -p %{buildroot}%{_includedir}/%{name}
 install -p SRC/libsuperlu.so.%{version} %{buildroot}%{_libdir}
 install -p SRC/*.h %{buildroot}%{_includedir}/%{name}
 chmod -x %{buildroot}%{_includedir}/%{name}/*.h
 cp -Pp SRC/libsuperlu.so %{buildroot}%{_libdir}
-cp -p EXAMPLE/*.c EXAMPLE/*.cua EXAMPLE/Makefile EXAMPLE/README %{buildroot}%{_docdir}/%{name}-devel-%{version}/EXAMPLE
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
 %doc README
 %{_libdir}/libsuperlu.so.*
 
 %files devel
-%defattr(-,root,root,-)
-%doc DOC FORTRAN
+%doc DOC EXAMPLE FORTRAN
 %{_includedir}/%{name}/
 %{_libdir}/libsuperlu.so
 
 %changelog
+* Fri Oct 4 2013 Orion Poplawski <orion@cora.nwra.com> - 4.3-7
+- Rebuild for atlas 3.10
+- Handle UnversionedDocDirs change
+
 * Fri Aug 02 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.3-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
