@@ -1,6 +1,6 @@
 Name:			SuperLU
 Version:		4.3
-Release:		8%{?dist}
+Release:		9%{?dist}
 Summary:		Subroutines to solve sparse linear systems
 %{?el5:Group:		System/Libraries}
 
@@ -100,6 +100,9 @@ popd
 %{_libdir}/libsuperlu.so
 
 %changelog
+* Fri Jun 06 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.3-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Mon Jan 06 2014 Björn Esser <bjoern.esser@gmail.com> - 4.3-8
 - fixed FTBFS if "-Werror=format-security" flag is used (#1037343)
 - devel-pkg must Requires: %%{name}%%{?_isa}
