@@ -1,6 +1,6 @@
 Name:			SuperLU
 Version:		4.3
-Release:		9%{?dist}
+Release:		10%{?dist}
 Summary:		Subroutines to solve sparse linear systems
 %{?el5:Group:		System/Libraries}
 
@@ -15,6 +15,9 @@ Patch1:			%{name}-build-shared-lib3.patch
 Patch2:			%{name}-fix-format-security.patch
 # Fixes testsuite
 Patch3:			SuperLU-fix-testsuite.patch
+# remove non-free mc64 functionality
+# patch obtained from the debian package
+Patch4:			SuperLU-removemc64.patch
 
 %{?el5:BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)}
 BuildRequires:		atlas-devel
@@ -42,6 +45,9 @@ and libraries for use with CUnit package.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4
+
+rm -fr SRC/mc64ad.f.bak
 find . -type f | sed -e "/TESTING/d" | xargs chmod a-x
 # Remove the shippped executables from EXAMPLE
 find EXAMPLE -type f | while read file
@@ -100,6 +106,9 @@ popd
 %{_libdir}/libsuperlu.so
 
 %changelog
+* Sun Jul 13 2014 Mukundan Ragavan <nonamedotc@gmail.com> - 4.3-10
+- Removed non-free files, fixes bz#1114264
+
 * Fri Jun 06 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.3-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
