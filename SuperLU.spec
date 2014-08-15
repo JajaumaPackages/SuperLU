@@ -1,6 +1,6 @@
 Name:			SuperLU
 Version:		4.3
-Release:		10%{?dist}
+Release:		11%{?dist}
 Summary:		Subroutines to solve sparse linear systems
 %{?el5:Group:		System/Libraries}
 
@@ -106,6 +106,9 @@ popd
 %{_libdir}/libsuperlu.so
 
 %changelog
+* Fri Aug 15 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.3-11
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
 * Sun Jul 13 2014 Mukundan Ragavan <nonamedotc@gmail.com> - 4.3-10
 - Removed non-free files, fixes bz#1114264
 
