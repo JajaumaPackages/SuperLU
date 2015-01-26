@@ -1,6 +1,6 @@
 Name:			SuperLU
 Version:		4.3
-Release:		11%{?dist}
+Release:		12%{?dist}
 Summary:		Subroutines to solve sparse linear systems
 %{?el5:Group:		System/Libraries}
 
@@ -37,7 +37,7 @@ Requires:		%{name}%{?_isa}		=  %{version}-%{release}
 
 %description devel 
 The %{name}-devel package contains the header files
-and libraries for use with CUnit package.
+and libraries for use with %{name} package.
 
 %prep
 %setup -q -n %{name}_%{version}
@@ -48,6 +48,7 @@ and libraries for use with CUnit package.
 %patch4
 
 rm -fr SRC/mc64ad.f.bak
+rm FORTRAN/*.old FORTRAN/*.bak
 find . -type f | sed -e "/TESTING/d" | xargs chmod a-x
 # Remove the shippped executables from EXAMPLE
 find EXAMPLE -type f | while read file
@@ -106,6 +107,10 @@ popd
 %{_libdir}/libsuperlu.so
 
 %changelog
+* Sun Jan 25 2015 Mukundan Ragavan <nonamedotc@fedoraproject.org> - 4.3-12
+- Fix spec file errors and remove backup files
+- fixes 1084707
+
 * Fri Aug 15 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.3-11
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
