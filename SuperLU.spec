@@ -1,23 +1,24 @@
+%global genname superlu
+%global majorver 5.1
+
 Name:			SuperLU
-Version:		4.3
-Release:		14%{?dist}
+Version:		5.1.1
+Release:		1%{?dist}
 Summary:		Subroutines to solve sparse linear systems
 %{?el5:Group:		System/Libraries}
 
 License:		BSD
 URL:			http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
-Source0:		http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_%{version}.tar.gz
+Source0:		http://crd-legacy.lbl.gov/~xiaoye/SuperLU/%{genname}_%{version}.tar.gz
 # Build with -fPIC
-Patch0:			%{name}-add-fpic.patch
+Patch0:			%{genname}-511-add-fpic.patch
 # Build shared library
-Patch1:			%{name}-build-shared-lib3.patch
-# Fixes FTBFS if "-Werror=format-security" flag is used (#1037343)
-Patch2:			%{name}-fix-format-security.patch
+Patch1:			%{genname}-511-build-shared-lib3.patch
 # Fixes testsuite
-Patch3:			SuperLU-fix-testsuite.patch
+Patch3:			%{genname}-511-fix-testsuite.patch
 # remove non-free mc64 functionality
 # patch obtained from the debian package
-Patch4:			SuperLU-removemc64.patch
+Patch4:			%{genname}-removemc64.patch
 
 %{?el5:BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)}
 BuildRequires:		atlas-devel
@@ -43,12 +44,10 @@ and libraries for use with %{name} package.
 %setup -q -n %{name}_%{version}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 %patch3 -p1
 %patch4
 
 rm -fr SRC/mc64ad.f.bak
-rm FORTRAN/*.old FORTRAN/*.bak
 find . -type f | sed -e "/TESTING/d" | xargs chmod a-x
 # Remove the shippped executables from EXAMPLE
 find EXAMPLE -type f | while read file
@@ -58,8 +57,8 @@ done
 cp -p MAKE_INC/make.linux make.inc
 sed -i	-e "s|-O3|$RPM_OPT_FLAGS|"							\
 	-e "s|\$(SUPERLULIB) ||"							\
-	-e "s|\$(HOME)/Codes/%{name}_%{version}|%{_builddir}/%{name}_%{version}|"	\
-	-e 's!lib/libsuperlu_4.3.a$!SRC/libsuperlu.so!'					\
+	-e "s|\$(HOME)/Dropbox/Codes/%{name}/%{name}|%{_builddir}/%{name}_%{version}|"	\
+	-e 's!lib/libsuperlu_5.1.a$!SRC/libsuperlu.so!'					\
 	-e 's!-shared!& %{__global_ldflags}!'						\
 %if 0%{?fedora} >= 21
 	-e "s|-L/usr/lib -lblas|-L%{_libdir}/atlas -lsatlas|"				\
@@ -76,7 +75,7 @@ make -C TESTING
 %{?el5:rm -rf %{buildroot}}
 mkdir -p %{buildroot}%{_libdir}
 mkdir -p %{buildroot}%{_includedir}/%{name}
-install -p SRC/libsuperlu.so.%{version} %{buildroot}%{_libdir}
+install -p SRC/libsuperlu.so.%{majorver} %{buildroot}%{_libdir}
 install -p SRC/*.h %{buildroot}%{_includedir}/%{name}
 chmod -x %{buildroot}%{_includedir}/%{name}/*.h
 cp -Pp SRC/libsuperlu.so %{buildroot}%{_libdir}
@@ -99,7 +98,7 @@ popd
 
 %files
 %doc README
-%{_libdir}/libsuperlu.so.*
+%{_libdir}/libsuperlu.so.%{majorver}
 
 %files devel
 %doc DOC EXAMPLE FORTRAN
@@ -107,6 +106,13 @@ popd
 %{_libdir}/libsuperlu.so
 
 %changelog
+* Mon Mar 21 2016 Mukundan Ragavan <nonamedotc@fedoraproject.org> - 5.1.1-1
+- Update to 5.1.1
+- Remove format security patch - not needed anymore
+- Edit patches to be version specific
+- Renamed patch4 to be consistent with others
+- Minor spec file housekeeping
+
 * Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 4.3-14
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
