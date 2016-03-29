@@ -3,11 +3,11 @@
 
 Name:			SuperLU
 Version:		5.1.1
-Release:		1%{?dist}
+Release:		2%{?dist}
 Summary:		Subroutines to solve sparse linear systems
 %{?el5:Group:		System/Libraries}
 
-License:		BSD
+License:		BSD and GPLV2+
 URL:			http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:		http://crd-legacy.lbl.gov/~xiaoye/SuperLU/%{genname}_%{version}.tar.gz
 # Build with -fPIC
@@ -39,6 +39,14 @@ Requires:		%{name}%{?_isa}		=  %{version}-%{release}
 %description devel 
 The %{name}-devel package contains the header files
 and libraries for use with %{name} package.
+
+%package doc
+Summary:		Documentation and Examples for SuperLU
+Requires:		%{name}%{?_isa} = %{version}-%{release}
+
+%description doc
+The %{name}-doc package contains all the help documentation along with C
+and FORTRAN examples.
 
 %prep
 %setup -q -n %{name}_%{version}
@@ -101,11 +109,17 @@ popd
 %{_libdir}/libsuperlu.so.%{majorver}
 
 %files devel
-%doc DOC EXAMPLE FORTRAN
 %{_includedir}/%{name}/
 %{_libdir}/libsuperlu.so
 
+%files doc
+%doc DOC EXAMPLE FORTRAN
+
 %changelog
+* Mon Mar 28 2016 Mukundan Ragavan <nonamedotc@fedoraproject.org> - 5.1.1-2
+- Added -doc subpackage
+- Added GPLv2 in the license field
+
 * Mon Mar 21 2016 Mukundan Ragavan <nonamedotc@fedoraproject.org> - 5.1.1-1
 - Update to 5.1.1
 - Remove format security patch - not needed anymore
