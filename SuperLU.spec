@@ -1,9 +1,9 @@
 %global genname superlu
-%global majorver 5.1
+%global libver 5.1
 
 Name:			SuperLU
-Version:		5.1.1
-Release:		2%{?dist}
+Version:		5.2.0
+Release:		1%{?dist}
 Summary:		Subroutines to solve sparse linear systems
 %{?el5:Group:		System/Libraries}
 
@@ -11,11 +11,11 @@ License:		BSD and GPLV2+
 URL:			http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:		http://crd-legacy.lbl.gov/~xiaoye/SuperLU/%{genname}_%{version}.tar.gz
 # Build with -fPIC
-Patch0:			%{genname}-511-add-fpic.patch
+Patch0:			%{genname}-5x-add-fpic.patch
 # Build shared library
-Patch1:			%{genname}-511-build-shared-lib3.patch
+Patch1:			%{genname}-5x-build-shared-lib3.patch
 # Fixes testsuite
-Patch3:			%{genname}-511-fix-testsuite.patch
+Patch3:			%{genname}-5x-fix-testsuite.patch
 # remove non-free mc64 functionality
 # patch obtained from the debian package
 Patch4:			%{genname}-removemc64.patch
@@ -83,7 +83,7 @@ make -C TESTING
 %{?el5:rm -rf %{buildroot}}
 mkdir -p %{buildroot}%{_libdir}
 mkdir -p %{buildroot}%{_includedir}/%{name}
-install -p SRC/libsuperlu.so.%{majorver} %{buildroot}%{_libdir}
+install -p SRC/libsuperlu.so.%{libver} %{buildroot}%{_libdir}
 install -p SRC/*.h %{buildroot}%{_includedir}/%{name}
 chmod -x %{buildroot}%{_includedir}/%{name}/*.h
 cp -Pp SRC/libsuperlu.so %{buildroot}%{_libdir}
@@ -106,7 +106,7 @@ popd
 
 %files
 %doc README
-%{_libdir}/libsuperlu.so.%{majorver}
+%{_libdir}/libsuperlu.so.%{libver}
 
 %files devel
 %{_includedir}/%{name}/
@@ -116,6 +116,10 @@ popd
 %doc DOC EXAMPLE FORTRAN
 
 %changelog
+* Thu Apr 14 2016 Mukundan Ragavan <nonamedotc@fedoraproject.org> - 5.2.0-1
+- Update to 5.2.0
+- spec file cleanup
+
 * Mon Mar 28 2016 Mukundan Ragavan <nonamedotc@fedoraproject.org> - 5.1.1-2
 - Added -doc subpackage
 - Added GPLv2 in the license field
