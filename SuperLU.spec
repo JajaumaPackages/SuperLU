@@ -3,7 +3,7 @@
 
 Name:			SuperLU
 Version:		5.2.0
-Release:		2%{?dist}
+Release:		3%{?dist}
 Summary:		Subroutines to solve sparse linear systems
 %{?el5:Group:		System/Libraries}
 
@@ -116,6 +116,9 @@ popd
 %doc DOC EXAMPLE FORTRAN
 
 %changelog
+* Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 5.2.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 5.2.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
