@@ -68,7 +68,7 @@ sed -i	-e "s|-O3|$RPM_OPT_FLAGS|"							\
 	-e "s|\$(HOME)/Dropbox/Codes/%{name}/%{name}|%{_builddir}/%{name}_%{version}|"	\
 	-e 's!lib/libsuperlu_5.1.a$!SRC/libsuperlu.so!'					\
 	-e 's!-shared!& %{__global_ldflags}!'						\
-%if 0%{?fedora} >= 21
+%if 0%{?fedora} >= 21 || 0%{?rhel} >= 7
 	-e "s|-L/usr/lib -lblas|-L%{_libdir}/atlas -lsatlas|"				\
 %else
 	-e "s|-L/usr/lib -lblas|-L%{_libdir}/atlas -lf77blas|"				\
